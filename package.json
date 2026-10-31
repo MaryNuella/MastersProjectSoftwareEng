@@ -1,0 +1,27 @@
+{
+  "name": "rule-based-research-framework",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test tests/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
+    "test:e2e": "playwright test",
+    "evaluate": "node scripts/evaluate.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
+    "@tailwindcss/postcss": "4.1.18",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.1.18"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "supabase": "2.122.0"
+  }
+}

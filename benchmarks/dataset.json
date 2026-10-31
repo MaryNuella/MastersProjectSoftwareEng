@@ -1,0 +1,783 @@
+{
+  "version": "1.0.0",
+  "requirements": [
+    {
+      "id": "password",
+      "projectId": "benchmark",
+      "title": "Password",
+      "description": "Benchmark: password",
+      "fieldName": "password",
+      "type": "password",
+      "required": true,
+      "constraints": {
+        "minLength": 8,
+        "maxLength": 20
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "email",
+      "projectId": "benchmark",
+      "title": "Email",
+      "description": "Benchmark: email",
+      "fieldName": "email",
+      "type": "email",
+      "required": true,
+      "constraints": {},
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "age",
+      "projectId": "benchmark",
+      "title": "Age",
+      "description": "Benchmark: age",
+      "fieldName": "age",
+      "type": "integer",
+      "required": true,
+      "constraints": {
+        "min": 18,
+        "max": 65
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "price",
+      "projectId": "benchmark",
+      "title": "Price",
+      "description": "Benchmark: price",
+      "fieldName": "price",
+      "type": "decimal",
+      "required": true,
+      "constraints": {
+        "min": 0.1,
+        "max": 0.3,
+        "precision": 2,
+        "step": 0.01
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "date",
+      "projectId": "benchmark",
+      "title": "Date",
+      "description": "Benchmark: date",
+      "fieldName": "date",
+      "type": "date",
+      "required": true,
+      "constraints": {
+        "minDate": "2024-02-28",
+        "maxDate": "2024-03-01"
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "optional",
+      "projectId": "benchmark",
+      "title": "Optional",
+      "description": "Benchmark: optional",
+      "fieldName": "optional",
+      "type": "text",
+      "required": false,
+      "constraints": {
+        "maxLength": 5
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "role",
+      "projectId": "benchmark",
+      "title": "Role",
+      "description": "Benchmark: role",
+      "fieldName": "role",
+      "type": "enum",
+      "required": true,
+      "constraints": {
+        "allowedValues": [
+          "reader",
+          "editor"
+        ]
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "consent",
+      "projectId": "benchmark",
+      "title": "Consent",
+      "description": "Benchmark: consent",
+      "fieldName": "consent",
+      "type": "boolean",
+      "required": true,
+      "constraints": {},
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "code",
+      "projectId": "benchmark",
+      "title": "Code",
+      "description": "Benchmark: code",
+      "fieldName": "code",
+      "type": "text",
+      "required": true,
+      "constraints": {
+        "minLength": 2,
+        "maxLength": 4,
+        "format": "alphanumeric"
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    },
+    {
+      "id": "exclusive",
+      "projectId": "benchmark",
+      "title": "Exclusive",
+      "description": "Benchmark: exclusive",
+      "fieldName": "exclusive",
+      "type": "decimal",
+      "required": true,
+      "constraints": {
+        "min": 1,
+        "max": 2,
+        "minExclusive": true,
+        "maxExclusive": true,
+        "precision": 1,
+        "step": 0.1
+      },
+      "validBehaviour": "Accept input",
+      "invalidBehaviour": "Reject input"
+    }
+  ],
+  "references": [
+    {
+      "id": "password/valid",
+      "requirementId": "password",
+      "objective": "valid",
+      "input": "aaaaaaaaaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/empty",
+      "requirementId": "password",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/wrong-type",
+      "requirementId": "password",
+      "objective": "wrong-type",
+      "input": 42,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/minLength:-1",
+      "requirementId": "password",
+      "objective": "minLength:-1",
+      "input": "aaaaaaa",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/minLength:0",
+      "requirementId": "password",
+      "objective": "minLength:0",
+      "input": "aaaaaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/minLength:1",
+      "requirementId": "password",
+      "objective": "minLength:1",
+      "input": "aaaaaaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/maxLength:-1",
+      "requirementId": "password",
+      "objective": "maxLength:-1",
+      "input": "aaaaaaaaaaaaaaaaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/maxLength:0",
+      "requirementId": "password",
+      "objective": "maxLength:0",
+      "input": "aaaaaaaaaaaaaaaaaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "password/maxLength:1",
+      "requirementId": "password",
+      "objective": "maxLength:1",
+      "input": "aaaaaaaaaaaaaaaaaaaaa",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "email/valid",
+      "requirementId": "email",
+      "objective": "valid",
+      "input": "aaaaaaa@b.co",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "email/empty",
+      "requirementId": "email",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "email/wrong-type",
+      "requirementId": "email",
+      "objective": "wrong-type",
+      "input": 42,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "email/invalid-format",
+      "requirementId": "email",
+      "objective": "invalid-format",
+      "input": "invalid-email",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/valid",
+      "requirementId": "age",
+      "objective": "valid",
+      "input": 18,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/empty",
+      "requirementId": "age",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/wrong-type",
+      "requirementId": "age",
+      "objective": "wrong-type",
+      "input": "not-a-number",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/min:-1",
+      "requirementId": "age",
+      "objective": "min:-1",
+      "input": 17,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/min:0",
+      "requirementId": "age",
+      "objective": "min:0",
+      "input": 18,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/min:1",
+      "requirementId": "age",
+      "objective": "min:1",
+      "input": 19,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/max:-1",
+      "requirementId": "age",
+      "objective": "max:-1",
+      "input": 64,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/max:0",
+      "requirementId": "age",
+      "objective": "max:0",
+      "input": 65,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "age/max:1",
+      "requirementId": "age",
+      "objective": "max:1",
+      "input": 66,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/valid",
+      "requirementId": "price",
+      "objective": "valid",
+      "input": 0.1,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/empty",
+      "requirementId": "price",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/wrong-type",
+      "requirementId": "price",
+      "objective": "wrong-type",
+      "input": "not-a-number",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/min:-1",
+      "requirementId": "price",
+      "objective": "min:-1",
+      "input": 0.09,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/min:0",
+      "requirementId": "price",
+      "objective": "min:0",
+      "input": 0.1,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/min:1",
+      "requirementId": "price",
+      "objective": "min:1",
+      "input": 0.11,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/max:-1",
+      "requirementId": "price",
+      "objective": "max:-1",
+      "input": 0.29,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/max:0",
+      "requirementId": "price",
+      "objective": "max:0",
+      "input": 0.3,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/max:1",
+      "requirementId": "price",
+      "objective": "max:1",
+      "input": 0.31,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "price/extra-precision",
+      "requirementId": "price",
+      "objective": "extra-precision",
+      "input": 0.101,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/valid",
+      "requirementId": "date",
+      "objective": "valid",
+      "input": "2024-02-28",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/empty",
+      "requirementId": "date",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/wrong-type",
+      "requirementId": "date",
+      "objective": "wrong-type",
+      "input": "2024-02-30",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/minDate:-1",
+      "requirementId": "date",
+      "objective": "minDate:-1",
+      "input": "2024-02-27",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/minDate:0",
+      "requirementId": "date",
+      "objective": "minDate:0",
+      "input": "2024-02-28",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/minDate:1",
+      "requirementId": "date",
+      "objective": "minDate:1",
+      "input": "2024-02-29",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/maxDate:-1",
+      "requirementId": "date",
+      "objective": "maxDate:-1",
+      "input": "2024-02-29",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/maxDate:0",
+      "requirementId": "date",
+      "objective": "maxDate:0",
+      "input": "2024-03-01",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "date/maxDate:1",
+      "requirementId": "date",
+      "objective": "maxDate:1",
+      "input": "2024-03-02",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/valid",
+      "requirementId": "optional",
+      "objective": "valid",
+      "input": "aaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/empty",
+      "requirementId": "optional",
+      "objective": "empty",
+      "input": "",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/wrong-type",
+      "requirementId": "optional",
+      "objective": "wrong-type",
+      "input": 42,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/maxLength:-1",
+      "requirementId": "optional",
+      "objective": "maxLength:-1",
+      "input": "aaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/maxLength:0",
+      "requirementId": "optional",
+      "objective": "maxLength:0",
+      "input": "aaaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "optional/maxLength:1",
+      "requirementId": "optional",
+      "objective": "maxLength:1",
+      "input": "aaaaaa",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/valid",
+      "requirementId": "role",
+      "objective": "valid",
+      "input": "reader",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/empty",
+      "requirementId": "role",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/wrong-type",
+      "requirementId": "role",
+      "objective": "wrong-type",
+      "input": 42,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/allowed:reader",
+      "requirementId": "role",
+      "objective": "allowed:reader",
+      "input": "reader",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/allowed:editor",
+      "requirementId": "role",
+      "objective": "allowed:editor",
+      "input": "editor",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "role/disallowed",
+      "requirementId": "role",
+      "objective": "disallowed",
+      "input": "__DISALLOWED__",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "consent/valid",
+      "requirementId": "consent",
+      "objective": "valid",
+      "input": true,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "consent/empty",
+      "requirementId": "consent",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "consent/wrong-type",
+      "requirementId": "consent",
+      "objective": "wrong-type",
+      "input": "true",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "consent/boolean-true",
+      "requirementId": "consent",
+      "objective": "boolean-true",
+      "input": true,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "consent/boolean-false",
+      "requirementId": "consent",
+      "objective": "boolean-false",
+      "input": false,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/valid",
+      "requirementId": "code",
+      "objective": "valid",
+      "input": "aaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/empty",
+      "requirementId": "code",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/wrong-type",
+      "requirementId": "code",
+      "objective": "wrong-type",
+      "input": 42,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/invalid-format",
+      "requirementId": "code",
+      "objective": "invalid-format",
+      "input": "!!",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/minLength:-1",
+      "requirementId": "code",
+      "objective": "minLength:-1",
+      "input": "a",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/minLength:0",
+      "requirementId": "code",
+      "objective": "minLength:0",
+      "input": "aa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/minLength:1",
+      "requirementId": "code",
+      "objective": "minLength:1",
+      "input": "aaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/maxLength:-1",
+      "requirementId": "code",
+      "objective": "maxLength:-1",
+      "input": "aaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/maxLength:0",
+      "requirementId": "code",
+      "objective": "maxLength:0",
+      "input": "aaaa",
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "code/maxLength:1",
+      "requirementId": "code",
+      "objective": "maxLength:1",
+      "input": "aaaaa",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/valid",
+      "requirementId": "exclusive",
+      "objective": "valid",
+      "input": 1.1,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/empty",
+      "requirementId": "exclusive",
+      "objective": "empty",
+      "input": "",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/wrong-type",
+      "requirementId": "exclusive",
+      "objective": "wrong-type",
+      "input": "not-a-number",
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/min:-1",
+      "requirementId": "exclusive",
+      "objective": "min:-1",
+      "input": 0.9,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/min:0",
+      "requirementId": "exclusive",
+      "objective": "min:0",
+      "input": 1,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/min:1",
+      "requirementId": "exclusive",
+      "objective": "min:1",
+      "input": 1.1,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/max:-1",
+      "requirementId": "exclusive",
+      "objective": "max:-1",
+      "input": 1.9,
+      "valid": true,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/max:0",
+      "requirementId": "exclusive",
+      "objective": "max:0",
+      "input": 2,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/max:1",
+      "requirementId": "exclusive",
+      "objective": "max:1",
+      "input": 2.1,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    },
+    {
+      "id": "exclusive/extra-precision",
+      "requirementId": "exclusive",
+      "objective": "extra-precision",
+      "input": 1.11,
+      "valid": false,
+      "rationale": "Hand-specified partition or boundary under the benchmark specification"
+    }
+  ]
+}
