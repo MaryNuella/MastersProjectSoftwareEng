@@ -41,3 +41,4 @@ artifacts/           Generated raw experiment files (Git-ignored)
 ```
 
 Read [delivery status](docs/delivery-status.md), [deployment](docs/deployment-guide.md), [user manual](docs/user-manual.md), and [research evidence checklist](docs/research-evidence-checklist.md). No remote migration, deployment or GitHub push is performed by these startup commands.
+# MastersProjectSoftwareEng
