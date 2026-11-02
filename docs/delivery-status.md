@@ -1,5 +1,45 @@
 # Delivery status — 30 October 2026
 
+## Prompt 2 authenticated verification — 2 November 2026
+
+This checkpoint supersedes the blocked verification and original implementation status below. Target was exclusively **Miva SE Project (`gnfktaxebbdklmjlrdgy`)**. Existing application and test implementation were used; no database schema, migration history, RLS, or unrelated records were changed. Local application/test URLs and public keys were checked for equality before live writes. Credentials were loaded explicitly with Node's `--env-file=.env.local` and were not printed.
+
+| Check | Actual result |
+|---|---|
+| Existing unit suite | 26 passed, 0 failed, 0 skipped; password boundaries, deterministic generation, validation mutations, duplicates, missing conditions, CSV escaping and JSON metadata |
+| Existing real Supabase integration suite | 1 passed, 0 failed, 0 skipped; both accounts authenticated, owner persistence, cases/findings/traceability, JSON and CSV exports, validation replacement, cross-user read denial and RPC denial, transaction rollback, snapshot survival and disposable project cleanup |
+| Supplemental authenticated CRUD verification | Passed project create/read/update/delete and requirement create/read/update/delete using a newly created TEST-CRUD UUID project; requirement update used existing save_requirement RPC; exact project absence confirmed after cleanup |
+| Supplemental password/validation checks | Passed positive/negative generation and string lengths 7/8/12/20/21; complete cases report no missing conditions, a copied objective reports duplicates, and empty cases report missing conditions |
+| Production build | Passed Next.js 16.4.3 optimized build, static generation and API compilation using .env.local |
+| Playwright against production server / Microsoft Edge | Final run: 3 passed, 0 failed, 0 skipped (28.8 seconds total); landing/auth boundary, mobile viewport and complete authenticated workflow including invalid-constraint rejection, saved generation/validation, traceability, CSV download and persisted history reopening |
+
+Actual initial failures: sandboxed integration failed at authentication with `AuthRetryableFetchError: fetch failed`; rerunning with network access passed. Initial browser run failed on transient "Project created" status even though the saved project row was visible. Only the test assertion was changed to verify that durable row. A subsequent browser run exceeded the default 30-second test limit; final execution with a 120-second limit passed. That limit is now recorded on the authenticated test. One launch approval review timed out before execution; its permitted retry launched successfully. These are reported as resolved execution/test-harness failures, not hidden or counted as passes.
+
+All live writes were disposable TEST-/TEST-E2E-/TEST-CRUD records created by these runs. Existing integration and browser finally blocks completed cleanup without reported errors; supplemental cleanup explicitly confirmed absence of its project. No unrelated records were deleted. The application provides project creation/listing in its UI/API; project update/delete were verified through the existing authenticated Supabase client rather than claiming those UI controls exist.
+
+**Prompt 2 passed; ready for Prompt 3.** This establishes the tested academic workflows, not a completed deployment or production operations/security audit. No deployment was attempted. Auth SMTP/production redirect settings, hosting configuration and operational controls remain deployment-stage work. Existing deployment-guide warnings describing unrepaired history/TRUNCATE grants are historical: those issues were resolved before this run.
+
+## Verification checkpoint — 31 October 2026
+
+This checkpoint supersedes the original setup statements below. Target: Miva SE Project (`gnfktaxebbdklmjlrdgy`), repository MaryNuella/MastersProjectSoftwareEng. Earlier database work applied the existing migration, removed application-role TRUNCATE privileges, and reconciled remote history to `20261030124301`; none of those operations was repeated during this verification attempt.
+
+Current inspection confirmed that browser and server clients use the same NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY variables. Next.js environment loading resolved the exact target URL `https://gnfktaxebbdklmjlrdgy.supabase.co` and an sb_publishable_ key. No NEXT_PUBLIC variable named for a secret/service-role credential was present, and .env.local is Git-ignored. The key value was not logged. This verifies local configuration and source wiring, not a running browser bundle or current remote key acceptance.
+
+Authentication source inspection confirmed email/password sign-in/sign-up, browser session bearer tokens, server-side auth.getUser verification, and owner-scoped database access. Actual login and ownership enforcement remain untested in this attempt.
+
+**Stopped: missing authenticated test configuration.** TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_OTHER_EMAIL, TEST_OTHER_PASSWORD, TEST_SUPABASE_URL and TEST_SUPABASE_PUBLISHABLE_KEY are absent; TEST_ALLOW_DATABASE_WRITES is not enabled. Configure two isolated, confirmed email/password accounts privately in the local environment, point both application and test clients at this exact approved project, and enable the explicit test-write gate. Do not paste passwords into chat or commit them. The existing Node/Playwright runners do not automatically load .env.local for test-process variables; supply them through the test process environment or an explicit environment-loading invocation.
+
+| Workflow/check | Actual outcome in this attempt |
+|---|---|
+| Client/API/auth source and local environment inspection | Completed; exact target URL and public key format confirmed |
+| Actual authentication and user-owned CRUD | Blocked: no test account credentials |
+| Password 8–20 generation and persisted cases/findings/traceability | Not run after authentication blocker |
+| Duplicate/missing-condition detection and CSV/JSON workflow | Not run after authentication blocker |
+| Two-user isolation | Blocked: no isolated account credentials |
+| Integration, Playwright and production build | Not run: stopped as instructed when credentials were found missing |
+
+No disposable records were created, no cleanup was needed, and no application code or database records were changed. No runtime failures were established. Deployment readiness is not established until authenticated integration and browser workflows pass; historical results below are not fresh verification results.
+
 All application modules are implemented locally. The production build and local pure-engine/browser checks pass. The acceptance criteria requiring live Supabase persistence are **not yet verified** because this workspace has no configured Supabase credentials and no Docker/local PostgreSQL installation. No remote database, deployment or GitHub push has been performed.
 
 ## 1. Implemented modules

@@ -32,6 +32,7 @@ test('mobile workspace stays within viewport',async({page})=>{
 test("complete authenticated research workflow and invalid constraint handling", async ({
   page,
 }) => {
+  test.setTimeout(120000);
   test.skip(
     process.env.TEST_ALLOW_DATABASE_WRITES !== "true" ||
       !process.env.TEST_USER_EMAIL ||
@@ -63,7 +64,8 @@ test("complete authenticated research workflow and invalid constraint handling",
     await page
       .getByRole("button", { name: "Create project", exact: true })
       .click();
-    await expect(page.getByRole("status")).toContainText("Project created");
+    // Selecting the new project triggers a refresh that clears transient status text.
+    await expect(page.getByRole("cell", { name: title, exact: true })).toBeVisible();
     const project = await db
       .from("projects")
       .select("id")
