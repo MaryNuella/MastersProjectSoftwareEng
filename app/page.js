@@ -11,6 +11,12 @@ export default function Home() {
         Design and Implementation of a Rule-Based Automated Test Case Generation
         and Validation Framework for Web Applications
       </h1>
+      <p style={{ margin: "0 0 8px", fontSize: "clamp(1.1rem, 2vw, 1.4rem)", lineHeight: 1.5, color: "#64D9C2" }}>
+        Research project by <strong style={{ fontWeight: 600 }}>Mary C. N. Enwezor</strong>
+      </p>
+      <p className="muted" style={{ margin: "0 0 24px", fontSize: "clamp(0.85rem, 1.5vw, 1rem)", lineHeight: 1.6 }}>
+        Master of Information Technology · Software Engineering · 2026
+      </p>
       <p className="lead">
         Turn structured requirements into explainable test cases. Inspect every
         rule, independently validate each result, and measure the evidence.
