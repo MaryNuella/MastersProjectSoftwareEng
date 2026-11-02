@@ -3,13 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { browserDb } from "../lib/browser";
 import { TYPES } from "../lib/requirements";
-import { RULES, RULE_VERSION } from "../lib/rules";
+import { RULE_VERSION } from "../lib/rules";
+import ConstraintFields from "./ConstraintFields";
+import Documentation from "./Documentation";
 import dataset from "../benchmarks/dataset.json";
 const navigation = [
   ["dashboard", "Overview"],
   ["projects", "Projects"],
   ["requirements", "Requirements"],
-  ["requirement-editor", "Requirement editor"],
   ["generation", "Generate cases"],
   ["test-cases", "Test repository"],
   ["validation", "Validation"],
@@ -50,7 +51,7 @@ function Table({ headers, rows }) {
             ))
           ) : (
             <tr>
-              <td colSpan={headers.length}>No records yet.</td>
+              <td colSpan={headers.length}>No saved records yet. Create a project, add requirements, then generate a session to build your evidence.</td>
             </tr>
           )}
         </tbody>
@@ -156,7 +157,7 @@ export default function Workspace({ section }) {
     }
   }, [projectId, auth?.user.id]);
   useEffect(() => {
-    if (auth && section === "evaluation")
+    if (auth && ["evaluation", "dashboard"].includes(section))
       run(async () => setEvaluations(await api("evaluations")));
   }, [auth?.user.id, section]);
   function remember(s) {
@@ -275,6 +276,8 @@ export default function Workspace({ section }) {
         />
         Required field
       </label>
+      <ConstraintFields type={draft.type} text={constraintText} onChange={setConstraintText} />
+      <details className="advanced"><summary>Advanced JSON</summary><p className="helper">Edit the exact constraint object. Changes are reflected in the guided controls.</p>
       <label>
         Constraints (JSON)
         <textarea
@@ -284,6 +287,7 @@ export default function Workspace({ section }) {
           onChange={(e) => setConstraintText(e.target.value)}
         />
       </label>
+      </details>
       <details>
         <summary>Constraint guide</summary>
         <p>
@@ -304,6 +308,7 @@ export default function Workspace({ section }) {
   );
   return (
     <div className="shell">
+      <a className="skip-link" href="#workspace">Skip to workspace</a>
       <aside>
         <Link className="brand" href="/">
           R / T<span>RESEARCH FRAMEWORK</span>
@@ -313,6 +318,7 @@ export default function Workspace({ section }) {
             <Link
               key={key}
               className={section === key ? "active" : ""}
+              aria-current={section === key ? "page" : undefined}
               href={`/${key}`}
             >
               {label}
@@ -325,7 +331,7 @@ export default function Workspace({ section }) {
           MIVA Open University · MIT
         </div>
       </aside>
-      <main className="workspace">
+      <main id="workspace" className="workspace" aria-busy={busy}>
         <header>
           <div>
             <div className="eyebrow">
@@ -355,68 +361,9 @@ export default function Workspace({ section }) {
             {message}
           </div>
         )}
-        {busy && <p role="status">Working…</p>}
+        {busy && <p className="loading" role="status">Working…</p>}
         {section === "documentation" ? (
-          <>
-            <article>
-              <h2>Defence demonstration workflow</h2>
-              <ol>
-                <li>
-                  Configure Supabase, apply the migration, and create an
-                  account.
-                </li>
-                <li>
-                  Create a project, then add a required password field with
-                  lengths 8–20.
-                </li>
-                <li>Select that requirement and generate a session.</li>
-                <li>
-                  Inspect 7, 8, 12, 20 and 21 character inputs and the expected
-                  behaviours.
-                </li>
-                <li>
-                  Revalidate and inspect missing conditions, duplicates and
-                  traceability.
-                </li>
-                <li>Export CSV and JSON, then run the benchmark evaluation.</li>
-              </ol>
-              <p>
-                Generated cases are design artifacts. The framework evaluates
-                field constraints; it does not execute them against an arbitrary
-                target website.
-              </p>
-            </article>
-            <Table
-              headers={["Rule", "Technique", "Algorithm"]}
-              rows={Object.entries(RULES).map(([id, r]) => [
-                id,
-                r.technique,
-                r.description,
-              ])}
-            />
-            <article>
-              <h2>Research method</h2>
-              <p>
-                Requirement-condition coverage uses the versioned, manually
-                authored benchmark oracle. Correctness uses independent
-                assertions over saved requirement snapshots. Duplication
-                requires matching requirement, input, constraints, outcome and
-                objective. A repeated input with a different objective is
-                retained.
-              </p>
-              <p>
-                Core timings exclude database, network and rendering. Manual
-                comparisons require actual work, measured with the timer, and
-                case JSON with the documented schema. No manual values are
-                inferred.
-              </p>
-              <p>
-                Full architecture, setup, rule catalogue, limits, export schema,
-                testing and evidence guidance are in the repository docs
-                directory.
-              </p>
-            </article>
-          </>
+          <Documentation />
         ) : !auth ? (
           <article className="auth">
             <h2>Access your research workspace</h2>
@@ -511,9 +458,9 @@ export default function Workspace({ section }) {
               <>
                 <div className="grid three">
                   {[
-                    ["Projects", projects.length],
-                    ["Requirements", requirements.length],
-                    ["Saved sessions", history.length],
+                    ["Your projects (latest 100)", projects.length],
+                    ["Active project requirements (up to 1,000)", projectId ? requirements.length : "Not selected"],
+                    ["Active project sessions (latest 100)", projectId ? history.length : "Not selected"],
                   ].map(([name, n]) => (
                     <article key={name}>
                       <p>{name}</p>
@@ -521,8 +468,13 @@ export default function Workspace({ section }) {
                     </article>
                   ))}
                 </div>
+                {!projects.length && <p className="empty-state">Begin with a project. Then define a field and its constraints on Requirements. Your counts reflect saved records, not demonstration data.</p>}
                 <article>
-                  <h2>From requirements to research evidence</h2>
+                  <h2>Evaluation evidence</h2>
+                  {evaluations.length ? <><p>Latest saved run / {new Date(evaluations[0].created_at).toLocaleString()}</p><p>{evaluations[0].payload.runs.length} recorded repetitions. Open Evaluation to inspect condition coverage, correctness, redundancy and core generation times from this persisted run.</p><Table headers={["First recorded iteration", "Coverage", "Correctness", "Redundancy"]} rows={evaluations[0].payload.runs.slice(0,1).map(r => [r.iteration, r.coverage == null ? "Not available" : `${r.coverage.toFixed(1)}%`, r.correctness == null ? "Not available" : `${r.correctness.toFixed(1)}%`, r.duplicationRate == null ? "Not available" : `${r.duplicationRate.toFixed(1)}%`])} /><Link href="/evaluation">Inspect all saved metrics</Link></> : <p className="muted">No saved evaluations yet. Run an evaluation with environment notes to record actual metrics. No research scores are assumed.</p>}
+                </article>
+                <article>
+                  <h2>Your research workflow</h2>
                   <p>
                     Choose a project, define its fields, generate a reproducible
                     session, and inspect the independent validation report.
@@ -583,6 +535,7 @@ export default function Workspace({ section }) {
             )}
             {["requirements", "requirement-editor"].includes(section) && (
               <>
+                {!projectId && <p className="empty-state">Choose an active project above, or <Link href="/projects">create a project</Link>, before saving a requirement.</p>}
                 {editor}
                 {section === "requirements" && (
                   <Table
@@ -642,7 +595,7 @@ export default function Workspace({ section }) {
                     </label>
                   ))
                 ) : (
-                  <p>Add requirements before generating.</p>
+                  <p className="empty-state">No requirements in this project yet. <Link href="/requirements">Define a requirement</Link>, then return here to select it for generation.</p>
                 )}
                 <button
                   className="primary"

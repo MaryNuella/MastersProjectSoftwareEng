@@ -1,5 +1,16 @@
 # Delivery status — 30 October 2026
 
+## Focused UI and documentation revision - 2 November 2026
+
+Implemented shared charcoal/teal styling, responsive spacing and typography, keyboard focus/skip navigation, reduced-motion support, loading presentation, landing process explanations, persisted-only dashboard summaries, and actionable empty states. Requirements combines listing/create/edit; /requirement-editor redirects safely. Guided controls cover the existing eight types and synchronize with Advanced JSON. No new constraint semantics or rules were introduced.
+
+The in-app academic handbook is derived from repository source and documentation, with architecture and traceability flow diagrams, rule catalogue, examples, experimental metric definitions and explicit limitations. Fixture sizes are distinguished from measured achievements.
+
+Verification: 26 unit tests passed; final production build passed; 4 Playwright checks passed (40.7 seconds), including the existing live authenticated workflow on gnfktaxebbdklmjlrdgy, guided constraints/JSON synchronization, mobile overflow, documentation navigation and legacy redirect. Initial browser execution timed out because helper text was included in guided-input accessible names; explicit input labels corrected this and the fresh-build rerun passed. Desktop landing and mobile documentation captures were visually inspected; captures are Git-ignored under test-results. Existing disposable-test cleanup ran as part of the browser workflow.
+
+No changes to lib research algorithms, API routes, authentication implementation, migrations, RLS or benchmark datasets. No push or deployment performed. New design is verified locally; the deployed site remains unchanged until a separately authorized release. The full live two-user integration suite was not rerun for this presentation-only revision; its prior passing result remains recorded below, and the live browser workflow was rerun.
+
+
 ## Prompt 2 authenticated verification — 2 November 2026
 
 This checkpoint supersedes the blocked verification and original implementation status below. Target was exclusively **Miva SE Project (`gnfktaxebbdklmjlrdgy`)**. Existing application and test implementation were used; no database schema, migration history, RLS, or unrelated records were changed. Local application/test URLs and public keys were checked for equality before live writes. Credentials were loaded explicitly with Node's `--env-file=.env.local` and were not printed.

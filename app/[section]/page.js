@@ -1,5 +1,5 @@
 import Workspace from "../../components/Workspace";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 const pages = [
   "dashboard",
   "projects",
@@ -18,6 +18,7 @@ export function generateStaticParams() {
 }
 export default async function Page({ params }) {
   const { section } = await params;
+  if (section === "requirement-editor") redirect("/requirements");
   if (!pages.includes(section)) notFound();
   return <Workspace section={section} />;
 }

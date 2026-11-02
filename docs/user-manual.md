@@ -3,8 +3,8 @@
 1. Open the application and enter the workspace. If a setup notice is shown, configure Supabase first (deployment-guide.md).
 2. Create an account using a valid email and password, confirm email if configured, then sign in.
 3. On Projects, enter a project title and create it. The active project selector persists across page navigation.
-4. On Requirements, create one structured field requirement. Give a title, description, field name, type, required flag, constraints, and expected behaviours. The default editor is a password example. Save. Invalid JSON or contradictory/unsupported constraints display an error without saving.
-5. To edit, choose Edit in the requirement list. Save updates the same ID. Delete removes the live requirement and constraints; earlier session snapshots remain available. IDs and timestamps are server-assigned.
+4. On Requirements, create one structured field requirement. Give a title, description, field name, type, required flag, constraints, and expected behaviours. The default editor is a password example. Use the guided length, range, date, format or allowed-value controls appropriate to the selected type. Advanced JSON edits the same constraint object for precise configuration. Save. Invalid JSON or contradictory/unsupported constraints display an error without saving.
+5. Creation, listing and editing share the Requirements page; the old /requirement-editor address redirects there. To edit, choose Edit in the requirement list. Save updates the same ID. Delete removes the live requirement and constraints; earlier session snapshots remain available. IDs and timestamps are server-assigned.
 6. On Generate cases, select the requirements and generate. A session records ordered cases, the immutable-by-application specification snapshot, the rule version, core duration and initial independent assessment. No random input is used.
 7. On Test repository, filter by title/category/rule. Inspect metadata to see preconditions, execution steps, input, expected outcome, constraint and objective. Export cases, validation or traceability as CSV or JSON.
 8. On Validation, click Validate cases to rerun independent assertions against the saved snapshots. Inspect passed/failed counts, missing conditions, traceability and duplicate groups. A failed completeness report can coexist with individually correct cases.
@@ -20,3 +20,10 @@ Create project “Defence demonstration”. Create required password field, minL
 ## Common errors
 
 “Sign in to continue” or invalid session: sign in again. “Supabase is not configured”: set environment variables and restart/rebuild. “Database operation failed”: confirm migration, table grants, Auth user and RLS policies. “Project not found”: choose an owned project. “Minimum exceeds maximum”: correct constraints. JSON syntax errors: use double-quoted property names and no trailing commas. A blank list means no records were returned; the application does not substitute fabricated records.
+
+
+## Research handbook and dashboard
+
+Documentation now provides an anchored academic handbook: objectives, methodology, architecture/data-flow diagrams, supported constraints, rule algorithms and password examples, independent validation, traceability, experiment definitions, demonstration guide and limitations. It describes implemented behaviour rather than claiming new experiments.
+
+Overview counts are based on loaded persisted records and explicitly state their listing limits. Requirements and sessions are scoped to the active project. Evaluation evidence comes only from the latest saved account evaluation; the first recorded iteration is labelled rather than presented as an aggregate. With no saved run, no evaluation score is shown.

@@ -81,16 +81,16 @@ test("complete authenticated research workflow and invalid constraint handling",
       .getByLabel("Description", { exact: true })
       .fill("Required password, 8 to 20 characters");
     await page.getByLabel("Input field name").fill("password");
-    await page
-      .getByLabel("Constraints (JSON)")
-      .fill('{"minLength":20,"maxLength":8}');
+    await page.getByLabel("Minimum length", { exact: true }).fill("20");
+    await page.getByLabel("Maximum length", { exact: true }).fill("8");
     await page.getByRole("button", { name: "Save requirement" }).click();
     await expect(page.getByRole("status")).toContainText(
       "Minimum length exceeds",
     );
-    await page
-      .getByLabel("Constraints (JSON)")
-      .fill('{"minLength":8,"maxLength":20}');
+    await page.getByLabel("Minimum length", { exact: true }).fill("8");
+    await page.getByLabel("Maximum length", { exact: true }).fill("20");
+    await page.getByText("Advanced JSON", { exact: true }).click();
+    await expect(page.getByLabel("Constraints (JSON)")).toHaveValue(/"minLength": 8/);
     await page.getByRole("button", { name: "Save requirement" }).click();
     await expect(page.getByRole("status")).toContainText("Requirement saved");
     await page
@@ -128,4 +128,21 @@ test("complete authenticated research workflow and invalid constraint handling",
     expect(cleanup.error).toBeNull();
     await db.auth.signOut();
   }
+});
+
+test("dark documentation and legacy requirements route", async ({ page }) => {
+ await page.goto('/');
+ await page.screenshot({path:'test-results/dark-landing-desktop.png',fullPage:true});
+ await page.goto('/documentation');
+ await page.screenshot({path:'test-results/dark-documentation-desktop.png',fullPage:true});
+ await expect(page.locator('html')).toHaveCSS('color-scheme','dark');
+ await expect(page.getByRole('navigation',{name:'Documentation contents'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Experimental methodology and metric definitions'})).toBeVisible();
+ await expect(page.getByRole('link',{name:'Requirement editor',exact:true})).toHaveCount(0);
+ await page.goto('/requirement-editor');
+ await expect(page).toHaveURL(/\/requirements$/);
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/documentation');
+ await page.screenshot({path:'test-results/dark-documentation-mobile.png',fullPage:true});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
