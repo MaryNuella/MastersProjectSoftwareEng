@@ -22,6 +22,10 @@ Create project “Defence demonstration”. Create required password field, minL
 “Sign in to continue” or invalid session: sign in again. “Supabase is not configured”: set environment variables and restart/rebuild. “Database operation failed”: confirm migration, table grants, Auth user and RLS policies. “Project not found”: choose an owned project. “Minimum exceeds maximum”: correct constraints. JSON syntax errors: use double-quoted property names and no trailing commas. A blank list means no records were returned; the application does not substitute fabricated records.
 
 
+## CSV import
+
+On Requirements or Test repository choose Import CSV, download the matching template, select a UTF-8 CSV and preview. Resolve manual requirement references where needed; every row must be valid. Check the explicit confirmation box before saving. Imports use the active owned project and are atomic; existing generated records are not overwritten. Manual cases retain manual_csv provenance and remain Unvalidated until explicit manual checks are run. See [CSV formats, examples and limitations](csv-import.md). The prepared migration requires separate approval/application before saving imports works; do not apply it automatically.
+
 ## Research handbook and dashboard
 
 Documentation now provides an anchored academic handbook: objectives, methodology, architecture/data-flow diagrams, supported constraints, rule algorithms and password examples, independent validation, traceability, experiment definitions, demonstration guide and limitations. It describes implemented behaviour rather than claiming new experiments.

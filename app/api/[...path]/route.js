@@ -17,6 +17,8 @@ import { RULE_VERSION } from "../../../lib/rules.js";
 import { exportData } from "../../../lib/exports.js";
 import { experiment, metrics } from "../../../lib/evaluation.js";
 import dataset from "../../../benchmarks/dataset.json";
+import { importCSV } from "../../../lib/server/csv-import.js";
+import { validateManualCases } from "../../../lib/manual-cases.js";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 async function body(req) {
@@ -47,6 +49,10 @@ async function handle(req, context) {
     if (path.length > 3) throw new InputError("Not found", 404);
     const { db, user } = await authenticated(req),
       method = req.method;
+    if (resource === "imports" && method === "POST") {
+      const imported = await importCSV(db, id, action, await body(req));
+      return Response.json(imported, { status: action === "confirm" ? 201 : 200 });
+    }
     if (resource === "projects" && !id) {
       if (method === "GET")
         return Response.json(
@@ -183,7 +189,9 @@ async function handle(req, context) {
       const s = await loadSession(db, id);
       if (method === "GET" && !action) return Response.json(s);
       if (method === "POST" && action === "validate") {
-        const validation = validate(s.requirements, s.cases);
+        const validation = s.source === "manual_csv"
+          ? validateManualCases(s.requirements, s.cases)
+          : validate(s.requirements, s.cases);
         await result(
           db.rpc("save_validation", {
             p_session: id,

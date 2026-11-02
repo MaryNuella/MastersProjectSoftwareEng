@@ -1,5 +1,29 @@
 # Delivery status — 30 October 2026
 
+## Hosted CSV verification - 2 November 2026
+
+Explicitly authorized limited writes used only configured test accounts against gnfktaxebbdklmjlrdgy through the existing local production-build APIs and real hosted Supabase Auth/PostgREST/RPCs. All 11 verification stages passed: both accounts authenticated; Requirements and manual-case previews/confirmation/imports; invalid-row and duplicate rejection (API and SQL); cross-user API/RPC/RLS denial; owned requirement references; persisted manual_csv provenance, Unvalidated findings and traceability; all six source-aware CSV/JSON export variants; generated-record preservation; exact-identity cleanup. No independent manual assessment or evaluation was run, so no experimental results were created.
+
+Fixture: project `1c7cc9e0-b9f3-4586-8f6c-4b9f23a3a696`, 3 requirements, 3 manual cases, and one generated comparison session containing 9 generated cases. IDs were saved as returned by the server before exercising each created record. Before deletion, all project/requirement/session/constraint/case/finding/snapshot/mapping IDs, ownership and relationships matched the manifest; there were no unexpected descendants. Only the exact owned, labelled fixture project was deleted; its existing cascades removed the verified descendants. All recorded IDs were confirmed absent afterward.
+
+Read-only pre/post fingerprints and counts matched for all 11 application tables. No pre-existing generated sessions/cases were present at baseline; the newly generated comparison session and every child row were verified unchanged across manual imports/rejection tests before cleanup. The pre-existing project and rule catalogue remained intact. No research datasets, user profiles, schema, policies or functions were changed.
+
+Actual manifest/check outcomes: Git-ignored `artifacts/hosted-csv-5737817c-a534-4974-820f-eee2f5c26062.json`; verification driver is also ignored. Tokens/passwords are not saved. Both test sessions were signed out locally, and the temporary local server was stopped. No commit, push or deployment occurred.
+
+CSV hosted verification passed with cleanup complete. The prepared migration is now applied and its history repaired to 20261102123737 using the supported CLI; the earlier migration-not-enabled blocker is resolved. Ready for review and separately authorized release of the pending implementation. Actual Vercel release verification is still pending deployment.
+
+
+## CSV import continuation - 2 November 2026
+
+Completed locally: Requirements and manual Test repository CSV templates, file selection, strict parsing, preview/row errors, existing/batch duplicate checks, owned-reference mapping, stale-preview recheck, explicit confirmation, atomic RPC calls and clear migration-not-enabled feedback. Source-aware session loading, repository/history labels, manual-only constraint assessment, traceability and CSV/JSON exports preserve manual_csv provenance. Manual imports start Unvalidated; no generation fields, timings, benchmark records or research results are invented. Generated research algorithms and datasets remain unchanged. Academic format/provenance guidance is in the in-app handbook and docs/csv-import.md.
+
+Actual verification: npm test passed 52 tests with 0 failures; the 1 multi-connection test skips under PGlite by design. A fresh native PostgreSQL 17.11 loopback cluster then passed all 18 SQL/service tests, including separate-connection duplicate contention, rollback, ownership/RLS, preview-confirm-reload-assessment-exports and preservation of generated records. The new migration was applied only in disposable isolated fixtures. No additional database change beyond 20261102123737_atomic_csv_imports.sql was required.
+
+Playwright: final 4 checks passed, covering the isolated CSV workflow plus read-only UI regressions. Browser CSV transport is intercepted and backed by the real service and local SQL functions; Supabase network requests are blocked. This is not a live hosted import claim. An initial test exposed a mapping select accessible-name mismatch; an explicit accessible label fixed it. Production build passed. The prior live authenticated write test was excluded deliberately. No production data, live migration or Supabase settings changed; no commit, push or deployment performed.
+
+Ready for review/approval of the prepared migration. Confirm remains blocked on the live project until separate migration application approval; a real hosted PostgREST/auth disposable-record smoke test needs separate write authorization after application. New-RPC project locks do not impose universal duplicate uniqueness on legacy/direct owner writes; this limitation is documented rather than addressed with an unapproved schema change.
+
+
 ## Focused UI and documentation revision - 2 November 2026
 
 Implemented shared charcoal/teal styling, responsive spacing and typography, keyboard focus/skip navigation, reduced-motion support, loading presentation, landing process explanations, persisted-only dashboard summaries, and actionable empty states. Requirements combines listing/create/edit; /requirement-editor redirects safely. Guided controls cover the existing eight types and synchronize with Advanced JSON. No new constraint semantics or rules were introduced.

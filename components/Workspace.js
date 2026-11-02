@@ -4,6 +4,7 @@ import Link from "next/link";
 import { browserDb } from "../lib/browser";
 import { TYPES } from "../lib/requirements";
 import { RULE_VERSION } from "../lib/rules";
+import CSVImport from "./CSVImport";
 import ConstraintFields from "./ConstraintFields";
 import Documentation from "./Documentation";
 import dataset from "../benchmarks/dataset.json";
@@ -454,6 +455,7 @@ export default function Workspace({ section }) {
               </label>
               {session && <span className="muted">Session: {session.id}</span>}
             </div>
+            {session && <p className="notice">Session source: <strong>{session.source === "manual_csv" ? "manual_csv - manually authored import" : "Automatically generated"}</strong>{session.source === "manual_csv" && <span> / {session.validation?.scope === "manual-constraint-checks/v1" ? "Manual constraint checks performed; generation metadata is not certified." : "Unvalidated author claims. No independent checks performed."}</span>}</p>}
             {section === "dashboard" && (
               <>
                 <div className="grid three">
@@ -536,6 +538,7 @@ export default function Workspace({ section }) {
             {["requirements", "requirement-editor"].includes(section) && (
               <>
                 {!projectId && <p className="empty-state">Choose an active project above, or <Link href="/projects">create a project</Link>, before saving a requirement.</p>}
+                <CSVImport key={`requirements:${projectId}`} kind="requirements" projectId={projectId} requirements={requirements} api={api} onImported={refresh} />
                 {editor}
                 {section === "requirements" && (
                   <Table
@@ -618,8 +621,7 @@ export default function Workspace({ section }) {
                 </button>
                 {session && (
                   <p>
-                    {session.cases.length} cases · core engine{" "}
-                    {session.coreDurationMs.toFixed(3)} ms{" "}
+                    {session.cases.length} cases / {session.source === "manual_csv" ? "Manually authored import: generation time not applicable" : `core engine ${session.coreDurationMs.toFixed(3)} ms`}{" "}
                     <Link href="/test-cases">Inspect cases →</Link>
                   </p>
                 )}
@@ -627,6 +629,7 @@ export default function Workspace({ section }) {
             )}
             {section === "test-cases" && (
               <>
+                <CSVImport key={`manual-cases:${projectId}`} kind="manual-cases" projectId={projectId} requirements={requirements} api={api} onImported={async data => { remember(await api(`sessions/${data.id}`)); await refresh(); }} />
                 <label>
                   Filter cases
                   <input
@@ -639,7 +642,7 @@ export default function Workspace({ section }) {
                 <Table
                   headers={[
                     "Case / requirement",
-                    "Category / rule",
+                    "Category / source or rule",
                     "Input",
                     "Expected",
                     "Details",
@@ -661,12 +664,13 @@ export default function Workspace({ section }) {
                       <>
                         {t.category}
                         <br />
-                        {t.ruleId}
+                        {t.source === "manual_csv" ? "manual_csv / author objective" : t.ruleId}
                       </>,
                       <pre>{JSON.stringify(t.input)}</pre>,
                       <>
                         {t.expectedValid ? "Valid" : "Invalid"} ·{" "}
                         {t.expectedResult}
+                        {t.source === "manual_csv" && <><br /><Badge>{session.validation?.findings.find(f => f.caseId === t.id)?.status ?? "Unvalidated"}</Badge></>}
                       </>,
                       <details>
                         <summary>Inspect metadata</summary>
@@ -690,11 +694,11 @@ export default function Workspace({ section }) {
                           {},
                         ),
                       );
-                      setMessage("Independent validation saved.");
+                      setMessage(session.source === "manual_csv" ? "Manual constraint checks saved. No generation provenance asserted." : "Independent validation saved.");
                     })
                   }
                 >
-                  Validate cases
+                  {session?.source === "manual_csv" ? "Validate manual cases" : "Validate cases"}
                 </button>
                 {report ? (
                   <>
@@ -703,6 +707,7 @@ export default function Workspace({ section }) {
                         ["Total cases", report.summary.total],
                         ["Passed", report.summary.passed],
                         ["Failed", report.summary.failed],
+                        ...(session?.source === "manual_csv" ? [["Unvalidated", report.summary.unvalidated ?? 0]] : []),
                       ].map(([k, v]) => (
                         <article key={k}>
                           {k}
@@ -714,9 +719,9 @@ export default function Workspace({ section }) {
                       <p>
                         Traceability:{" "}
                         <Badge>{report.summary.traceabilityStatus}</Badge> ·
-                        Redundant cases: {report.summary.duplicateCases} ·
+                        Redundant cases: {report.scope === "unvalidated" ? "Not assessed" : report.summary.duplicateCases} ·
                         Missing conditions:{" "}
-                        {report.summary.missingConditions.length}
+                        {report.scope === "unvalidated" ? "Not assessed" : report.summary.missingConditions.length}
                       </p>
                       {report.summary.missingConditions.map((c) => (
                         <p key={c}>{c}</p>
@@ -787,9 +792,9 @@ export default function Workspace({ section }) {
                       {t.rules.join(", ")}
                     </details>,
                     <>
-                      {t.covered.length} covered
+                      {t.status === "Unvalidated" ? "Coverage not assessed" : `${t.covered.length} covered`}
                       <details>
-                        <summary>{t.uncovered.length} missing</summary>
+                        <summary>{t.status === "Unvalidated" ? "Assessment pending" : `${t.uncovered.length} missing`}</summary>
                         {t.uncovered.join(", ")}
                       </details>
                     </>,
@@ -817,7 +822,7 @@ export default function Workspace({ section }) {
                 rows={history.map((h) => [
                   <code>{h.id}</code>,
                   new Date(h.created_at).toLocaleString(),
-                  h.payload.validation.summary.total,
+                  h.payload.source === "manual_csv" ? "manual_csv - reopen to inspect" : h.payload.validation.summary.total,
                   <button
                     disabled={busy}
                     onClick={() =>
@@ -838,6 +843,7 @@ export default function Workspace({ section }) {
               <>
                 <article>
                   <h2>Reproducible experiment</h2>
+                  <p className="notice">CSV imports never start experiments or supply human design time. Manual comparison requires the existing measured-time and participant protocol. Project import references are not automatically mapped to benchmark identities; use only cases authored for the benchmark specification.</p>
                   <p>
                     Dataset {dataset.version}: {dataset.requirements.length}{" "}
                     requirements, {dataset.references.length} independently
