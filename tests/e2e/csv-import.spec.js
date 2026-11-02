@@ -87,6 +87,12 @@ test("CSV preview, mapping, explicit confirmation and manual provenance workflow
     await page.getByRole('button',{name:'Confirm import'}).click();
     await expect(page.getByText('Imported 1 manual cases (Unvalidated).',{exact:true})).toBeVisible();
     await expect(page.getByText('Unvalidated',{exact:true})).toBeVisible();
+    await page.goto('/traceability');
+    await expect(page.getByText('manual_csv - manually authored import',{exact:true})).toBeVisible();
+    // The coverage cell also contains a disclosure; exact full DOM text includes it.
+    const pendingTrace = page.getByRole('row').filter({ hasText: imported });
+    await expect(pendingTrace.getByRole('cell',{name:/Coverage not assessed/})).toBeVisible();
+    await expect(pendingTrace.getByText('Unvalidated',{exact:true})).toBeVisible();
     await page.goto('/validation');
     await expect(page.getByRole('button',{name:'Validate manual cases'})).toBeVisible();
     await expect(page.getByText(/Missing conditions: Not assessed/)).toBeVisible();
