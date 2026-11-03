@@ -259,6 +259,7 @@ async function handle(req, context) {
             throw new InputError("Manual cases must be an array ≤2500");
           manual = {
             ...b.manual,
+            provenanceCertification: "Not assessed; submitted cases do not establish human authorship",
             notes: text(b.manual.notes, "Manual protocol notes", 2000),
             metrics: metrics(
               dataset.requirements,

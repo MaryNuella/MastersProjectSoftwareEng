@@ -846,8 +846,8 @@ export default function Workspace({ section }) {
                   <p className="notice">CSV imports never start experiments or supply human design time. Manual comparison requires the existing measured-time and participant protocol. Project import references are not automatically mapped to benchmark identities; use only cases authored for the benchmark specification.</p>
                   <p>
                     Dataset {dataset.version}: {dataset.requirements.length}{" "}
-                    requirements, {dataset.references.length} independently
-                    authored reference conditions.
+                    requirements, {dataset.references.length} specified
+                    reference conditions; independent review is not certified.
                   </p>
                   <label>
                     Environment and protocol
@@ -873,8 +873,10 @@ export default function Workspace({ section }) {
                     <p>
                       Start the timer before designing cases. Stop after
                       completing them. Paste the actual cases as JSON using the
-                      test case schema; missing metadata is assessed as a
-                      failure. Only the timer's current-tab interval is
+                      semantic case schema: requirementId, input, expectedValid,
+                      expectedResult, category and objective. Generation metadata
+                      is not required. Use benchmark requirement IDs and preserve
+                      any manual_csv source labels. Only the timer's current-tab interval is
                       measured. Reloading discards the interval.
                     </p>
                     <button
@@ -956,9 +958,10 @@ export default function Workspace({ section }) {
                       headers={[
                         "Iteration",
                         "Condition coverage",
-                        "Correctness",
+                        e.payload.evaluationMethodVersion === "2.0.0" ? "Semantic correctness" : "Correctness (historical method)",
                         "Duplication",
                         "Core time (ms)",
+                        ...(e.payload.evaluationMethodVersion === "2.0.0" ? ["Generated certification (passed/assessed)"] : []),
                       ]}
                       rows={e.payload.runs.map((r) => [
                         r.iteration,
@@ -966,8 +969,10 @@ export default function Workspace({ section }) {
                         `${r.correctness?.toFixed(2)}%`,
                         `${r.duplicationRate?.toFixed(2)}%`,
                         r.coreDurationMs.toFixed(3),
+                        ...(e.payload.evaluationMethodVersion === "2.0.0" ? [`${r.generatedMetadataCertification?.passed ?? "Not recorded"}/${r.generatedMetadataCertification?.assessed ?? "Not recorded"}`] : []),
                       ])}
                     />
+                    {e.payload.evaluationMethodVersion === "2.0.0" && <p className="notice">Comparison method 2.0.0: source-neutral semantic scores. Generated certification separately applies the existing metadata and semantic validator. Manual authorship and independent oracle review are not certified.</p>}
                     <div
                       className="chart"
                       role="img"
